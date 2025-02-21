@@ -3,6 +3,7 @@ import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { defineCustomElements } from '@trimble-oss/modus-web-components/loader';
 
+
 defineCustomElements();
 
 bootstrapApplication(AppComponent, appConfig)

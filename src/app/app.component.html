@@ -1,6 +1,5 @@
 <main class="main">
-  <div #renderContainer class="render__container">
-    <p>hello</p>
+  <div class="render__container" *ngFor="let container of containers; let i = index">
+    <app-render [codeString]="codeStrings[i]"></app-render>
   </div>
-  <button (click)="renderReactComponent()">Render</button>
 </main>
