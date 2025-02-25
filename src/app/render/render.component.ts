@@ -26,6 +26,7 @@ export class RenderComponent implements AfterViewInit {
   //Function for rendering React components
   async renderReactComponent(container: HTMLElement, codeString: string) {
     let mycode = this.renderservice.removeImportStatements(codeString);
+    mycode = this.renderservice.removeExportStatements(mycode);
     const { dependencies, updatedCode } = this.renderservice.extractDependencies(mycode);
     const transpiledCode = Babel.transform(updatedCode, {
       presets: ['react', 'env', 'typescript'],

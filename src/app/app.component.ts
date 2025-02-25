@@ -7,7 +7,7 @@ import { RenderComponent } from './render/render.component';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports : [CommonModule,RenderComponent]
+  imports: [CommonModule, RenderComponent]
 })
 export class AppComponent{
   codeStrings: string[] = CodeStrings;

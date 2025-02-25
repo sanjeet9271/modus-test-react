@@ -356,6 +356,173 @@ const MyComponent: React.FC = () => {
 
 // Dependencies: 'React', 'ModusNavbar', 'ModusCard', 'ModusButton', 'useEffect', 'useRef'
 
+`,
+`
+import React, { useEffect, useRef, useState } from 'react';
+import { ModusNavbar, ModusSideNavigation, ModusSideNavigationItem, ModusIcon, ModusButton, ModusModal, ModusTextInput } from '@trimble-oss/modus-react-components';
+
+const MyComponent: React.FC = () => {
+  const navbarRef = useRef<any>(null);
+  const [sideNavExpanded, setSideNavExpanded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  useEffect(() => {
+    const element = navbarRef.current;
+    if (element) {
+      element.apps = [
+        {
+          description: 'The One Trimble Design System',
+          logoUrl: 'https://modus.trimble.com/favicon.svg',
+          name: 'Trimble Modus',
+          url: 'https://modus.trimble.com/',
+        },
+      ];
+      element.logoOptions = {
+        primary: {
+          url: 'https://modus-bootstrap.trimble.com/img/trimble-logo-rev.svg',
+          height: 24,
+        },
+        secondary: {
+          url: 'https://modus.trimble.com/favicon.svg',
+          height: 24,
+        },
+      };
+      element.profileMenuOptions = {
+        avatarUrl: 'https://avatar.example.com/broken-image-link.png',
+        email: 'modus_user@trimble.com',
+        initials: 'MU',
+        signOutText: 'Sign out',
+        username: 'Modus User',
+      };
+      element.notificationCount = 10;
+
+      const handleMainMenuClick = (e: CustomEvent) => {
+        setSideNavExpanded((prev) => !prev);
+      };
+
+      element.addEventListener('mainMenuClick', handleMainMenuClick);
+
+      return () => {
+        element.removeEventListener('mainMenuClick', handleMainMenuClick);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    const btnModal = document.querySelector('#btn-modal1');
+    const modal = document.querySelector('#modal1');
+
+    if (btnModal) {
+      btnModal.addEventListener('click', () => {
+        if (modal) {
+          (modal as any).open();
+        }
+      });
+    }
+
+    if (modal) {
+      modal.addEventListener('closed', () => {
+        setTimeout(() => {
+          if (btnModal) {
+            (btnModal as any).focus();
+          }
+        }, 100);
+      });
+    }
+  }, []);
+
+  const handleFormSubmit = () => {
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Message:', message);
+    setIsModalOpen(false);
+  };
+
+  return (
+    <div style={{ height: '100vh', overflow: 'auto' }}>
+      <ModusNavbar
+        id="navbar7"
+        showAppsMenu
+        showHelp
+        showMainMenu
+        showNotifications
+        variant="blue"
+        ref={navbarRef}
+      />
+      <p style={{ position: 'absolute', top: '10px', left: '185px', color: 'white', fontFamily: 'Open Sans', fontSize: '24px' }}>
+        Construction
+      </p>
+      <div id="container" style={{ display: 'flex', minHeight: '500px', overflowY: 'auto', position: 'relative', boxShadow: '0 0 2px var(--modus-secondary) !important' }}>
+        <ModusSideNavigation maxWidth="300px" id="sideNav" targetContent="#panelcontent" expanded={sideNavExpanded}>
+          <ModusSideNavigationItem id="home-menu" label="Home page">
+            <ModusIcon name="home" size="24" slot="menu-icon"></ModusIcon>
+          </ModusSideNavigationItem>
+          <ModusSideNavigationItem id="usage-menu" label="Usage">
+            <ModusIcon name="flowchart" size="24" slot="menu-icon"></ModusIcon>
+          </ModusSideNavigationItem>
+          <ModusSideNavigationItem id="styles-menu" label="Styles">
+            <ModusIcon name="bar_graph_line" size="24" slot="menu-icon"></ModusIcon>
+          </ModusSideNavigationItem>
+          <ModusSideNavigationItem id="accessibility-menu" label="Accessibility">
+            <ModusIcon name="screen" size="24" slot="menu-icon"></ModusIcon>
+          </ModusSideNavigationItem>
+        </ModusSideNavigation>
+        <div id="panelcontent" style={{ padding: '10px' }}>
+          <div id="overview">
+            <p>The side navigation of an application provides context through accessible menu options and positions a consistent component to connect to various pages in the application.</p>
+            <p>The side navigation is a collapsible side content of the site’s pages. It is located alongside the page’s primary content. The component is designed to add side content to a fullscreen application. It is activated through the “hamburger” menu in the Navbar.</p>
+          </div>
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '16px', overflow: 'auto' }}>
+        <img src="https://placehold.co/800x400" alt="Construction Image" style={{ width: '100%', height: 'auto' }} />
+        <footer style={{ width: '100%', textAlign: 'center', padding: '16px', backgroundColor: '#f1f1f1' }}>
+          <p>About Trimble: Trimble is transforming the way the world works by delivering products and services that connect the physical and digital worlds. Core technologies in positioning, modeling, connectivity, and data analytics enable customers to improve productivity, quality, safety, and sustainability.</p>
+          <ModusButton id="btn-modal1" leftIcon="email">Contact Us</ModusButton>
+        </footer>
+      </div>
+      <ModusModal id="modal1" headerText="Contact Us" primaryButtonText="Submit" secondaryButtonText="Cancel">
+        <div style={{ maxHeight: '400px', overflow: 'auto' }}>
+          <ModusTextInput label="Name" value={name} onInput={(e: any) => setName(e.target.value)} />
+          <ModusTextInput label="Email" type="email" value={email} onInput={(e: any) => setEmail(e.target.value)} />
+          <ModusTextInput label="Message" value={message} onInput={(e: any) => setMessage(e.target.value)} />
+        </div>
+      </ModusModal>
+    </div>
+  );
+};
+
+export default MyComponent;
+// Dependencies: 'React','ModusNavbar','ModusSideNavigation','ModusSideNavigationItem','ModusIcon','ModusButton','ModusModal','ModusTextInput','useEffect','useRef','useState'
+
+`,
+`
+import React, { useEffect } from 'react';
+import { ModusButton } from '@trimble-oss/modus-react-components';
+
+const MyComponent: React.FC = () => {
+  useEffect(() => {
+    const notificationButton = document.querySelector('#notificationButton');
+    if (notificationButton) {
+      notificationButton.addEventListener('buttonClick', () => {
+        alert('Notification clicked');
+      });
+    }
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', overflow: 'auto' }}>
+      <ModusButton id="notificationButton" buttonStyle="borderless" iconOnly="notifications"></ModusButton>
+    </div>
+  );
+};
+
+export default MyComponent;
+// Dependencies: 'React', 'ModusButton', 'useEffect'
+
 `
 
 
