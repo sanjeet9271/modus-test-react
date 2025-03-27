@@ -24,6 +24,7 @@
     "@trimble-oss/modus-web-components": "^1.4.0",
     "file-system": "^2.2.2",
     "fs": "^0.0.1-security",
+    "marked": "^15.0.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react2angular": "^4.0.6",

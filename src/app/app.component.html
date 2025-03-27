@@ -1,6 +1,17 @@
 <main class="main">
-  <div class="render__container" *ngFor="let container of containers; let i = index">
-    <app-render [codeString]="codeStrings[i]"></app-render>
+  <div class="render__container">
+    <app-render [data]="codeStrings[currentIndex]"></app-render>
+  </div>
+  <div class="navigation">
+    <button (click)="prevComponent()" [disabled]="currentIndex === 0">Previous</button>
+    <button (click)="nextComponent()" [disabled]="currentIndex === codeStrings.length - 1">Next</button>
+  </div>
+  <div class="status">
+    <p>Total Components: {{ totalComponents }}</p>
+    <p>Successful Renders: {{ successfulRenders }}</p>
+    <p>Failed Renders: {{ failedRenders }}</p>
+    <p>Success Percentage: {{ successPercentage | number: '1.0-2' }}%</p>
   </div>
 </main>
+
 <!-- <app-sample></app-sample> -->

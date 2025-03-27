@@ -1,11 +1,57 @@
-.render__container{
-    border: 2px solid red;
-    margin: 20px;
-    height: 600px;
-    position: relative;
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background-color: #555151; /* Dark mode background */
+  color: #ffffff; /* Light text color for dark mode */
+  min-height: 100vh; /* Ensure the main container covers the full height */
 }
 
-.main{
-    display: flex;
-    flex-direction: column;
+.render__container {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 32px;
+}
+
+pre {
+  color: white !important;
+}
+
+.language-markdown {
+  color: white !important;
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #ffffff; /* Light text color for dark mode */
+  background-color: #007bff; /* Primary button color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #6c757d; /* Disabled button color */
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3; /* Hover effect for enabled buttons */
+}
+
+.status {
+  text-align: center;
+}
+
+.status p {
+  margin: 5px 0;
 }

@@ -1,1 +1,6 @@
-<div #container></div>
+<div class="info">
+    <p><strong>Prompt:</strong> {{ data.prompt }}</p>
+    <p><strong>Accuracy:</strong> <span class="accuracy" [innerHTML]="data.accuracy | markdown"></span></p>
+</div>
+<div #container class="code-container"></div>
+  

@@ -2,6 +2,8 @@ import { Component,ViewChildren, QueryList, ElementRef} from '@angular/core';
 import {CodeStrings } from './code-snippets';
 import { CommonModule } from '@angular/common'
 import { RenderComponent } from './render/render.component';
+import Complete_Prompts from "./Complete_Prompts.json";
+import { CountService } from '../services/count-service.service';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +12,46 @@ import { RenderComponent } from './render/render.component';
   imports: [CommonModule, RenderComponent]
 })
 export class AppComponent{
-  codeStrings: string[] = CodeStrings;
+  codeStrings: any[] = [];
+  currentIndex: number = 0;
+  constructor(private countservice: CountService) {}
+
+  ngOnInit() {
+    this.codeStrings = Complete_Prompts;
+  }
 
   get containers() {
     return Array.from({ length: this.codeStrings.length }, (_, i) => i);
   }
+
+  get totalComponents() {
+    return this.countservice.getTotal();
+  }
+
+  get successfulRenders() {
+    return this.countservice.getSuccess();
+  }
+
+  get failedRenders() {
+    return this.countservice.getFailure();
+  }
+
+  get successPercentage() {
+    return this.countservice.getSuccessPercentage();
+  }
+
+  nextComponent(): void {
+    if (this.currentIndex < this.codeStrings.length - 1) {
+      this.currentIndex++;
+    }
+  }
+
+  prevComponent(): void {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
+  }
+  
 }
 
 

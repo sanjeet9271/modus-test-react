@@ -1,0 +1,37 @@
+:host {
+    display: block;
+    background-color: #121212; /* Dark mode background */
+    color: #ffffff; /* Light text color for dark mode */
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .info {
+    background-color: #1e1e1e; /* Slightly lighter dark background for info section */
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .info p {
+    margin: 8px 0;
+  }
+  
+  .code-container {
+    background-color: #ffffff; /* White background for code container */
+    color: #000000; /* Dark text color for code container */
+    padding: 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  
+  .code-container pre {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+  }
+
+
+  

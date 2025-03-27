@@ -1,58 +1,84 @@
-import { AfterViewInit, Component, Input, ViewChild,ElementRef } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild, ElementRef,SimpleChanges } from '@angular/core';
 import ComptDict from '../comp-dict';
 import * as React from 'react';
 import * as Babel from '@babel/standalone';
 import { createRoot } from 'react-dom/client';
 import { RenderServiceService } from '../../services/render-service.service';
+import { MarkdownPipe } from '../markdown.pipe';
+import { CountService } from '../../services/count-service.service';
 
 @Component({
   selector: 'app-render',
-  imports: [],
   templateUrl: './render.component.html',
-  styleUrl: './render.component.css'
+  styleUrls: ['./render.component.css'],
+  standalone: true,
+  imports: [MarkdownPipe]
 })
 export class RenderComponent implements AfterViewInit {
-  //This will take an codestring as input and render it within itself which will be passed fromt it's parent component app.component
-  constructor (private renderservice : RenderServiceService) {}
 
-  @Input() codeString: string = '';
+  constructor(private renderservice: RenderServiceService,private countservice: CountService) {}
+
+  @Input() data: any = {};
 
   @ViewChild('container', { static: true }) containerRef!: ElementRef;
 
   ngAfterViewInit(): void {
-    this.renderReactComponent(this.containerRef.nativeElement, this.codeString);
+    this.renderReactComponent(this.containerRef.nativeElement, this.data.response);
   }
 
-  //Function for rendering React components
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && !changes['data'].isFirstChange()) {
+      this.renderReactComponent(this.containerRef.nativeElement, this.data.response);
+    }
+  }
+
+  private extractCodeBlocks(input: string): string {
+    const startMarker = '```';
+    const endMarker = '```';
+    const markerIndex = input.indexOf(startMarker);
+    if (markerIndex === -1) {
+      return '';
+    }
+    const startIndex = markerIndex + startMarker.length;
+    const endOfFirstLineIndex = input.indexOf('\n', startIndex);
+    if (endOfFirstLineIndex === -1) {
+      return '';
+    }
+    const endIndex = input.indexOf(endMarker, endOfFirstLineIndex);
+    if (endIndex === -1) {
+      return '';
+    }
+    return input.substring(endOfFirstLineIndex + 1, endIndex).trim();
+  }
+
+  // Function for rendering React components
   async renderReactComponent(container: HTMLElement, codeString: string) {
-    let mycode = this.renderservice.removeImportStatements(codeString);
+    this.countservice.incrementTotal();
+    let varcode = this.extractCodeBlocks(codeString);
+    console.log(varcode);
+    let mycode = this.renderservice.removeImportStatements(varcode);
     mycode = this.renderservice.removeExportStatements(mycode);
-    const { dependencies, updatedCode } = this.renderservice.extractDependencies(mycode);
-    const transpiledCode = Babel.transform(updatedCode, {
+    const transpiledCode = Babel.transform(mycode, {
       presets: ['react', 'env', 'typescript'],
       filename: 'file.tsx'
     }).code;
 
     if (transpiledCode) {
       try {
-
-        const dependenciesList = dependencies.map(dep => {
-          const dependency = ComptDict[dep as keyof typeof ComptDict];
-          return dependency;
-        });
-
-        const functionArgs = dependencies.join(', ');
-
+        const functionArgs = Object.keys(ComptDict).join(', ');
+        const dependenciesList = Object.keys(ComptDict).map(key => (ComptDict as any)[key]);
         const MyComponent = new Function(functionArgs, `${transpiledCode};return MyComponent;`)(...dependenciesList);
 
         if (MyComponent) {
           const root = createRoot(container);
           root.render(React.createElement(MyComponent));
+          this.countservice.incrementSuccess();
         } else {
           console.error('MyComponent is not defined.');
         }
       } catch (error) {
         console.error('Error executing transpiled code:', error);
+
       }
     } else {
       console.error('Transpilation failed.');
